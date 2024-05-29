@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "../../bitcamp-study"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../eomcs-java"
+		},
+		{
+			"path": "../../myapp"
+		},
+		{
+			"path": "../../bitcamp-20230424"
+		},
+		{
+			"path": "../../../config"
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "disabled"
+	}
+}
