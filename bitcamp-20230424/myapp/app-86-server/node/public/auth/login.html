@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>비트캠프</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<header class="x-page-header"></header>
+
+<h1>로그인</h1>
+<div id="x-message" class="alert alert-error x-hidden">
+    이메일 또는 암호가 일치하지 않습니다.
+</div>
+<form id="x-login-form">
+    <table style="border: 1px;">
+    <tr>
+        <th>이메일</th> <td><input id="x-email" type='text' name='email'></td>
+    </tr>
+    <tr>
+        <th>암호</th> <td><input id="x-password" type='password' name='password'></td>
+    </tr>
+    </table>
+    <span id="x-csrf"></span><br>
+    <button>로그인</button>
+    <input id="x-saveEmail" type='checkbox' name='saveEmail'> 이메일 저장
+</form>
+
+<footer class="x-page-footer"></footer>
+
+<script src="/js/common.js"></script>
+<script src="/js/page-init.js"></script>
+<script>
+    "use strict";
+
+    const loginForm = document.querySelector("#x-login-form");
+
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                var result = JSON.parse(xhr.responseText);
+                console.log(result);
+                if (result.status == "success") {
+                    //document.querySelector("#x-csrf").innerHTML = getCookie("XSRF-TOKEN");
+                } else {
+                    alert("CSRF 보안 토큰을 받을 수 없습니다.");
+                }
+            } 
+        }
+    };
+    xhr.open("GET" , `${RESTAPI_HOST}/csrf/token` , true);
+    xhr.withCredentials = true;
+    xhr.send();
+
+    loginForm["x-email"].value = getCookie("email");
+
+    loginForm.onsubmit = (e) => { 
+        e.preventDefault();
+        const formData = new FormData(loginForm);
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var result = JSON.parse(xhr.responseText);
+                    console.log(result);
+                    if (result.status == "success") {
+                        location.href = "/";
+                    } else {
+                        document.querySelector("#x-message").classList.remove("x-hidden");
+                        loginForm["x-password"].value = "";
+                    }
+                }
+            }
+        };
+        xhr.open("POST" , `${RESTAPI_HOST}/auth/login` , true);
+        xhr.setRequestHeader("X-XSRF-TOKEN", getCookie("XSRF-TOKEN"));
+        xhr.withCredentials = true;
+        xhr.send(formData);
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>게시글</title>
+<link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<header class="x-page-header"></header>
+
+<h1>게시글 목록</h1>
+
+<div>
+<a id="x-new-board" href="form.html">새 글</a>
+</div>
+
+<table border='1'>
+<thead>
+  <tr><th>번호</th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>등록일</th></tr>
+</thead>
+<tbody></tbody>
+</table> 
+ 
+<div>
+<a href='/'>메인</a>
+</div>
+
+<footer class="x-page-footer"></footer>
+
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/page-init.js"></script>
+<script>
+"use strict";
+
+const tbody = $("tbody");
+
+document.querySelector("#x-new-board").href = `form.html?category=${pageContext.params.get("category")}`;
+
+// 목록 데이터 요청
+(function() {
+    $.ajax(`${RESTAPI_HOST}/boards/${pageContext.params.get("category")}`, {
+        xhrFields: {
+            withCredentials: true
+        },
+        dataType: "json",
+    })
+    .done((result) => {
+        if (result.status == "failure") {
+            alert("데이터 오류 입니다!");
+            return;
+        }
+        for (let board of result.data) {
+            if (!board.title) {
+                board.title = "제목없음";
+            }
+            $("<tr>")
+                .append($("<td>").html(`${board.no}`))
+                .append($("<td>").append(
+                    $("<a>")
+                        .attr("href", `detail.html?category=${pageContext.params.get("category")}&no=${board.no}`)
+                        .html(`${board.title}`)))
+                .append($("<td>").html(`${board.writer.name}`))
+                .append($("<td>").html(`${board.viewCount}`))
+                .append($("<td>").html(`${board.createdDate}`))
+                .appendTo(tbody);
+        }
+    });
+})();
+
+</script>
+</body>
+</html>
