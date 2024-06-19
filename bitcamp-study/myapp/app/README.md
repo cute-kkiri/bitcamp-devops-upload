@@ -11,7 +11,6 @@
 ## 요구사항
 
 - 회원 CRUD 구현
-- 팀 CRUD 구현
 - 프로젝트 CRUD 구현
 - 게시판 CRUD 구현
 
@@ -260,12 +259,32 @@
   - ProjectCommand.addMembers() 추가
   - ProjectCommand.deleteMembers() 추가
   - Project.deleteMember() 추가
-  
+
+### 게사판 CRUD
+
+- 게시글 CRUD 명령을 처리할 클래스를 정의한다.
+  - BoardCommand 클래스 생성
+  - App 클래스 변경
+- 게시글 등록을 구현한다.
+  - 정보를 저장할 새 데이터 타입을 정의: Board 클래스 생성
+  - addBoard() 변경
+- 게시글 목록을 구현한다.
+  - listBoard() 변경
+- 게시글 조회를 구현한다.
+  - viewBoard() 변경
+- 게시글 변경을 구현한다.
+  - updateBoard() 변경
+- 게시글 삭제를 구현한다.
+  - deleteBoard() 변경
+
 ## 소스 파일
 
 - App.java
 - User.java
 - UserCommand.java
 - Prompt.java
-- 
+- Project.java
+- ProjectCommand.java
+- Board.java
+- BoardCommand.java
   
